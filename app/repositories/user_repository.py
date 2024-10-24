@@ -17,3 +17,11 @@ class UserRepository(BaseUserRepository):
         Search for a user by username.
         """
         return self.db.query(User).filter(User.username == username).first()
+    
+    def add_user(self, user: User) -> None:
+        """
+        Adds a new user to the database.
+        :param user: The User object to be added.
+        """
+        self.db.add(user)
+        self.db.commit()

@@ -1,5 +1,6 @@
 import httpx
 from datetime import datetime
+from app.common.cache_decorator import redis_cache
 from app.models.coin_models import CoinRequest, CoinResponse, Variation
 from app.core.interfaces.base_crypto_repository import BaseCryptoRepository
 from app.common.coins_type import CoinsType
@@ -7,6 +8,7 @@ from app.common.coins_type import CoinsType
 class CoinGeckoRepository(BaseCryptoRepository):
     BASE_URL = "https://api.coingecko.com/api/v3"
 
+    @redis_cache(cache_key_prefix="coingecko-get_coin_info")
     def get_coin_info(self, request: CoinRequest) -> CoinResponse:
         coin_name = CoinsType.get_name(request.symbol)
 
@@ -30,7 +32,7 @@ class CoinGeckoRepository(BaseCryptoRepository):
         coin_price_brl = market_data.get("current_price", 0)
         coin_price_usd = detail_data["market_data"]["current_price"].get("usd", 0)
 
-        return CoinResponse(
+        item = CoinResponse(
             total_items=1,
             coin_name=market_data["name"],
             product_id=request.symbol.upper(),
@@ -55,3 +57,5 @@ class CoinGeckoRepository(BaseCryptoRepository):
             coin_price_dolar=f"{coin_price_usd:.6f}",
             date_consult=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
+
+        return item.model_dump()

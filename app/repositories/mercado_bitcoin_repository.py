@@ -1,12 +1,14 @@
 import httpx
 from urllib.parse import urljoin
 from datetime import datetime
+from app.common.cache_decorator import redis_cache
 from app.models.coin_models import CoinRequest, CoinResponse, Variation
 from app.core.interfaces.base_crypto_repository import BaseCryptoRepository
 
 class MercadoBitcoinRepository(BaseCryptoRepository):
     BASE_URL = "https://store.mercadobitcoin.com.br/"
 
+    @redis_cache(cache_key_prefix="mercado-bitcoin-get_coin_info")
     def get_coin_info(self, request: CoinRequest) -> CoinResponse:
         params = {
             "symbol": request.symbol.lower(),
@@ -51,4 +53,4 @@ class MercadoBitcoinRepository(BaseCryptoRepository):
             coin_price=coin_price_brl,
             coin_price_dolar=f"{coin_price_usd:.6f}",
             date_consult=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        )
+        ).model_dump()

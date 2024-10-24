@@ -14,3 +14,12 @@ class BaseUserRepository(ABC):
         Search for a user by username.
         """
         raise NotImplementedError()
+    
+    @abstractmethod
+    def add_user(self, user: User) -> User:
+        """
+        Create a new user in the database.
+        """
+        raise NotImplementedError
+    
+

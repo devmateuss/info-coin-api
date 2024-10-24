@@ -28,7 +28,7 @@ def redis_cache(cache_key_prefix: str, ttl: int = 600) -> Callable:
 
             result = func(*args, **kwargs)
 
-            redis_client.setex(cache_key, ttl or settings.redis_cache_tll, json.dumps(result.dict()))
+            redis_client.setex(cache_key, ttl or settings.redis_cache_tll, json.dumps(result))
             return result
 
         return wrapper

@@ -1,40 +1,41 @@
-version: '3.8'
+version: '3.9'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: mercado_bitcoin_app
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://your_postgres_user:your_postgres_password@db:5432/your_database_name
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=962e1cda9a517b53fe1996906f5632cc58e78d35fbabf9dd5433048bf00fa307
+      - JWT_EXPIRE_MINUTES=60
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/database
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - SECRET_KEY=your_jwt_secret_key
-      - JWT_EXPIRE_MINUTES=30
     depends_on:
       - db
       - redis
-    volumes:
-      - .:/app
 
   db:
     image: postgres:14
+    container_name: mercado_bitcoin_db
+    environment:
+      POSTGRES_USER: your_postgres_user
+      POSTGRES_PASSWORD: your_postgres_password
+      POSTGRES_DB: your_database_name
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
 
   redis:
-    image: redis:7
+    image: redis:latest
+    container_name: mercado_bitcoin_redis
     ports:
       - "6379:6379"
-    volumes:
-      - redis_data:/data
 
 volumes:
   postgres_data:
-  redis_data:
