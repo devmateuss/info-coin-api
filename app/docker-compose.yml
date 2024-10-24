@@ -1,18 +1,40 @@
-version: '3'
+version: '3.8'
+
 services:
-  db:
-    image: postgres:13
-    container_name: mercadobitcoin_postgres
-    restart: always
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mercadobitcoin_db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/database
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SECRET_KEY=your_jwt_secret_key
+      - JWT_EXPIRE_MINUTES=30
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:14
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres_data:
+  redis_data:
