@@ -19,21 +19,16 @@ class UserService:
             username = user_data.get('username')
             password = user_data.get('password')
 
-            # Validações básicas
             if not username or not password:
                 return response(jsonify({"error": "Username and password are required"}), 400)
 
-            # Criação do repositório de usuário
             user_repository = UserRepository(self.db)
 
-            # Verificar se o usuário já existe
             if user_repository.get_user_by_username(username):
                 return response(jsonify({"error": "User already exists"}), 400)
 
-            # Hash da senha
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-            # Criar e salvar o novo usuário
             user = User(username=username, password=hashed_password)
             user_repository.add_user(user)
 

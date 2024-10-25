@@ -1,5 +1,3 @@
-# src/utils/cache_decorator.py
-
 import json
 import functools
 from typing import Callable

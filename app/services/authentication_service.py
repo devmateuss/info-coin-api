@@ -1,5 +1,3 @@
-# src/services/authentication_service.py
-
 import jwt
 import bcrypt
 from datetime import datetime, timedelta
@@ -22,22 +20,17 @@ class AuthenticationService:
         :return: JSON response with the JWT token or an error message.
         """
         try:
-            # Extract data from the request
             data = request.json
             username = data.get('username')
             password = data.get('password')
 
-            # Validate the received data
             if not username or not password:
                 return response(jsonify({"error": "Username and password are required"}), 400)
 
-            # Fetch user from the database using the repository
             user_repository = UserRepository(self.db)
             user = user_repository.get_user_by_username(username)
             
-            # Verify user credentials
             if user and self.verify_password(password, user.password):
-                # If credentials are valid, create a JWT token
                 token = self.create_token(user.id)
                 return response(jsonify({"access_token": token}), 200)
             else:

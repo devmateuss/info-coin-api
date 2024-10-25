@@ -1,4 +1,3 @@
-# src/core/interfaces/base_crypto_api.py
 from abc import ABC, abstractmethod
 from app.models.coin_models import CoinRequest, CoinResponse
 

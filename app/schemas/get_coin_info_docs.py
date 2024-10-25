@@ -1,5 +1,3 @@
-# app/schemas/get_coin_info_docs.py
-
 get_coin_info_docs = {
     'tags': ['Crypto'],
     'summary': 'Get cryptocurrency information',

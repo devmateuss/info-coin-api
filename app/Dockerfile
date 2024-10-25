@@ -11,5 +11,6 @@ COPY . .
 EXPOSE 8000
 
 ENV FLASK_ENV=production
+ENV FLASK_APP=main.py
 
-CMD ["python", "app/main.py"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
