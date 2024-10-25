@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql://your_postgres_user:your_postgres_password@db:5432/your_database_name
+      - DATABASE_URL=postgresql://admin:admin@db:5432/mercadobitcoin_db
       - REDIS_URL=redis://redis:6379/0
       - SECRET_KEY=962e1cda9a517b53fe1996906f5632cc58e78d35fbabf9dd5433048bf00fa307
       - JWT_EXPIRE_MINUTES=60
@@ -20,12 +20,12 @@ services:
       - redis
 
   db:
-    image: postgres:14
+    image: postgres:13
     container_name: mercado_bitcoin_db
     environment:
-      POSTGRES_USER: your_postgres_user
-      POSTGRES_PASSWORD: your_postgres_password
-      POSTGRES_DB: your_database_name
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mercadobitcoin_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:

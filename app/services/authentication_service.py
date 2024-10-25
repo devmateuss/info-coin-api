@@ -1,5 +1,3 @@
-# src/services/authentication_service.py
-
 import jwt
 import bcrypt
 from datetime import datetime, timedelta
